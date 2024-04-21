@@ -101,6 +101,12 @@ const TabsLayout = () => {
             ),
           }}
         />
+        <Tabs.Screen
+          name="search/[query]"
+          options={{
+            href: null,
+          }}
+        />
       </Tabs>
 
       <StatusBar style="light" backgroundColor="#161622" />
