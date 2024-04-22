@@ -8,28 +8,30 @@ import { images } from "../../constants";
 import { Link, router } from "expo-router";
 import { createUser } from "../../lib/appwrite";
 const SignUp = () => {
+  const { loading, setLoading, setUser, setIsLoggedIn } = useGlobalContext();
   const [form, setForm] = useState({
     username: "",
     email: "",
     password: "",
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const submit = async () => {
     if (!form.username || !form.email || !form.password) {
       Alert.alert("Error", "Please fill in all fields");
     }
 
-    setIsSubmitting(true);
+    setLoading(true);
 
     try {
       const result = await createUser(form.username, form.email, form.password);
-
+      setUser(result);
+      setIsLoggedIn(true);
+      
       router.replace("/home");
     } catch (error) {
       Alert.alert("Error", error.message);
     } finally {
-      setIsSubmitting(false);
+      setLoading(false);
     }
   };
   return (
@@ -71,7 +73,7 @@ const SignUp = () => {
           <CustomButton
             title="Sign Up"
             onPress={submit}
-            isLoading={isSubmitting}
+            isLoading={loading}
             containerStyles="mt-7"
           />
 

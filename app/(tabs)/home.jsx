@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, FlatList, Image, RefreshControl } from "react-native";
 import { images } from "../../constants";
 import { getAllPosts } from "../../lib/appwrite";
+import { useGlobalContext } from "../../context/GlobalProvider";
 
 import SearchInput from "../../components/SearchInput";
 import Trending from "../../components/Trending";
@@ -12,6 +13,7 @@ import useAppwrite from "../../lib/useAppwrite";
 import VideoCard from "../../components/VideoCard";
 const Home = () => {
   const { data: posts, refetch } = useAppwrite(getAllPosts);
+  const { user } = useGlobalContext();
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = async() => {
     setRefreshing(true);
@@ -28,6 +30,7 @@ const Home = () => {
             title={item.title}
             thumbnail={item.thumbnail}
             video={item.video}
+            creatorId={item.creator.$id}
             creator={item.creator.username}
             avatar={item.creator.avatar}
           />
@@ -40,7 +43,7 @@ const Home = () => {
                   Welcome Back
                 </Text>
                 <Text className="text-white font-psemibold text-2xl">
-                  OreoApollo
+                  {user?.username}
                 </Text>
               </View>
               <View className="mt-1.5">

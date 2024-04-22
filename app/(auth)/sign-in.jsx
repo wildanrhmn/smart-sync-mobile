@@ -6,29 +6,34 @@ import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
 import { images } from "../../constants";
 import { Link, router } from "expo-router";
-import { userLogin } from "../../lib/appwrite";
+import { getCurrentUser, userLogin } from "../../lib/appwrite";
+import { useGlobalContext } from "../../context/GlobalProvider";
 const SignIn = () => {
+  const { loading, setLoading, setUser, setIsLoggedIn } = useGlobalContext();
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const submit = async () => {
     if (!form.email || !form.password) {
       Alert.alert("Error", "Please fill in all fields");
     }
 
-    setIsSubmitting(true);
+    setLoading(true);
 
     try {
       await userLogin(form.email, form.password);
+      const result = await getCurrentUser();
+      setUser(result);
+      setIsLoggedIn(true);
 
+      Alert.alert("Success", "Login Successful");
       router.replace("/home");
     } catch (error) {
       Alert.alert("Error", error.message);
     } finally {
-      setIsSubmitting(false);
+      setLoading(false);
     }
   };
   return (
@@ -63,7 +68,7 @@ const SignIn = () => {
           <CustomButton
             title="Sign In"
             onPress={submit}
-            isLoading={isSubmitting}
+            isLoading={loading}
             containerStyles="mt-7"
           />
 

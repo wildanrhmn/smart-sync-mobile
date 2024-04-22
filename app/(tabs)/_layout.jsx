@@ -1,9 +1,10 @@
-import React from "react";
+import Loader from "../../components/Loader";
 
 import { View, Text, Image } from "react-native";
 import { Tabs, Redirect } from "expo-router";
 import { icons } from "../../constants";
 import { StatusBar } from "expo-status-bar";
+import { useGlobalContext } from "../../context/GlobalProvider";
 
 const TabIcon = ({ icon, color, name, focused }) => {
   return (
@@ -25,6 +26,10 @@ const TabIcon = ({ icon, color, name, focused }) => {
 };
 
 const TabsLayout = () => {
+  const { loading, isLoggedIn } = useGlobalContext();
+
+  if (!loading && !isLoggedIn) return <Redirect href="/sign-in" />;
+
   return (
     <>
       <Tabs
@@ -87,7 +92,7 @@ const TabsLayout = () => {
           }}
         />
         <Tabs.Screen
-          name="profile"
+          name="myprofile"
           options={{
             title: "Profile",
             headerShown: false,
@@ -102,13 +107,20 @@ const TabsLayout = () => {
           }}
         />
         <Tabs.Screen
+          name="profile/[id]"
+          options={{
+            href: null,
+          }}
+        />
+        <Tabs.Screen
           name="search/[query]"
           options={{
             href: null,
           }}
         />
       </Tabs>
-
+      
+      <Loader isLoading={loading} />
       <StatusBar style="light" backgroundColor="#161622" />
     </>
   );
