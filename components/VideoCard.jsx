@@ -1,14 +1,23 @@
 import { useState } from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { icons } from "../constants";
 import { ResizeMode, Video } from "expo-av";
 import { router } from "expo-router";
 
+import OutsidePressHandler from "react-native-outside-press";
+
 const VideoCard = ({ title, creatorId, creator, avatar, thumbnail, video }) => {
   const [play, setPlay] = useState(false);
+  const [menuActive, setMenuActive] = useState(false);
+ 
   return (
     <View className="flex flex-col items-center px-4 mb-14">
-      <View className="flex flex-row gap-3 items-start">
+      <View className="relative flex flex-row gap-3 items-start">
         <View className="flex justify-center items-center flex-row flex-1">
           <TouchableOpacity
             onPress={() => router.push(`/profile/${creatorId}`)}
@@ -33,9 +42,39 @@ const VideoCard = ({ title, creatorId, creator, avatar, thumbnail, video }) => {
             </Text>
           </View>
         </View>
-        <View className="pt-2">
+        <TouchableOpacity
+          className="pt-2"
+          onPress={() => setMenuActive(true)}
+        >
           <Image source={icons.menu} className="w-6 h-6" resizeMode="contain" />
-        </View>
+        </TouchableOpacity>
+
+        {menuActive && (
+          <OutsidePressHandler onOutsidePress={() => setMenuActive(false)} className="absolute right-0 -bottom-20 z-50">
+            <View
+              className="bg-black-100 border-2 border-black-200 min-w-[150px] py-3 rounded-xl px-5 space-y-5"
+            >
+              <TouchableOpacity className="flex flex-row space-x-3 items-center">
+                <Image
+                  source={icons.bookmark}
+                  className="w-4 h-4"
+                  resizeMode="contain"
+                />
+                <Text className="text-sm text-gray-100 font-pmedium">Save</Text>
+              </TouchableOpacity>
+              <TouchableOpacity className="flex flex-row space-x-3 items-center">
+                <Image
+                  source={icons.bookmark}
+                  className="w-4 h-4"
+                  resizeMode="contain"
+                />
+                <Text className="text-sm text-gray-100 font-pmedium">
+                  Delete
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </OutsidePressHandler>
+        )}
       </View>
 
       {play ? (
