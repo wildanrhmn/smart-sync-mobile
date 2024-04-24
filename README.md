@@ -1,3 +1,2 @@
-# AORA
-
-React Native Crash Course, made with React Native-EXPO, and Appwrite as BaaS.
+# SmartSync Mobile App
+Created with React-Native, EXPO, and Appwrite as BaaS.
