@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Aora",
-    "slug": "aora",
-    "scheme": "aora",
+    "name": "SmartSync",
+    "slug": "smartsync",
+    "scheme": "smartsync",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -23,7 +23,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.jsm.aurora"
+      "package": "com.wnr.smartsync"
     },
     "web": {
       "favicon": "./assets/favicon.png"

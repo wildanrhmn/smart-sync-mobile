@@ -29,14 +29,14 @@ const SignUp = () => {
       setUser(result);
       setIsLoggedIn(true);
 
-      Toast.show('Successfully registered.', {
+      Toast.show("Successfully registered.", {
         duration: Toast.durations.LONG,
         position: Toast.positions.BOTTOM,
         shadow: true,
         animation: true,
         hideOnPress: true,
       });
-      
+
       router.replace("/home");
     } catch (error) {
       Alert.alert("Error", error.message);
@@ -51,11 +51,11 @@ const SignUp = () => {
           <Image
             source={images.logo}
             resizeMode="contain"
-            className="w-[115px] h-[35px]"
+            className="w-[110px] h-[75px]"
           />
 
-          <Text className="text-white text-2xl text-semibold mt-10 font-psemibold">
-            Sign Up to Aora
+          <Text className="text-white text-2xl text-semibold mt-5 font-psemibold">
+            Sign Up to Smart Sync
           </Text>
 
           <FormField
@@ -93,7 +93,7 @@ const SignUp = () => {
             </Text>
             <Link
               href="/sign-in"
-              className="text-secondary font-psemibold text-lg underline"
+              className="text-orange font-psemibold text-lg underline"
             >
               Sign In
             </Link>
