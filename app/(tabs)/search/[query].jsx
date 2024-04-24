@@ -45,7 +45,7 @@ const Search = () => {
             </View>
           </View>
 
-          <SearchInput initialQuery={query} />
+          <SearchInput initialQuery={query} placeholder="Search videos" />
         </View>
         )}
         ListEmptyComponent={() => (

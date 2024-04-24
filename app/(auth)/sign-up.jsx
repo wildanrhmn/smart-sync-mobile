@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { View, Text, ScrollView, Image, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-import FormField from "../../components/FormField";
-import CustomButton from "../../components/CustomButton";
 import { images } from "../../constants";
 import { Link, router } from "expo-router";
 import { createUser } from "../../lib/appwrite";
+import { useGlobalContext } from "../../context/GlobalProvider";
+
+import Toast from "react-native-root-toast";
+import FormField from "../../components/FormField";
+import CustomButton from "../../components/CustomButton";
 const SignUp = () => {
   const { loading, setLoading, setUser, setIsLoggedIn } = useGlobalContext();
   const [form, setForm] = useState({
@@ -26,6 +28,14 @@ const SignUp = () => {
       const result = await createUser(form.username, form.email, form.password);
       setUser(result);
       setIsLoggedIn(true);
+
+      Toast.show('Successfully registered.', {
+        duration: Toast.durations.LONG,
+        position: Toast.positions.BOTTOM,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+      });
       
       router.replace("/home");
     } catch (error) {

@@ -17,6 +17,8 @@ import { userLogout } from "../../lib/appwrite";
 import useAppwrite from "../../lib/useAppwrite";
 import VideoCard from "../../components/VideoCard";
 import EmptyState from "../../components/EmptyState";
+import Toast from "react-native-root-toast";
+
 const MyProfile = () => {
   const { data: posts, refetch } = useAppwrite(() => getPostsByUser(user.$id));
   const { user, setUser, setLoading, setIsLoggedIn } = useGlobalContext();
@@ -33,6 +35,14 @@ const MyProfile = () => {
       setUser(null);
       setIsLoggedIn(false);
 
+      Toast.show('Successfully logged out.', {
+        duration: Toast.durations.LONG,
+        position: Toast.positions.BOTTOM,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+      })
+      
       router.push("/sign-in");
     } catch (error) {
       console.log(error);
@@ -99,7 +109,8 @@ const MyProfile = () => {
         ListEmptyComponent={() => (
           <EmptyState
             title={`No Video Found`}
-            subtitle={`Be the first one to upload a video!`}
+            subtitle={`Go and upload your first video!`}
+            showButton={false}
           />
         )}
         refreshControl={

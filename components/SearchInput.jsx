@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { router, usePathname } from "expo-router";
 import { View, TouchableOpacity, Image, TextInput, Alert } from "react-native";
-
 import { icons } from "../constants";
 
-const SearchInput = ({ initialQuery }) => {
+import Toast from "react-native-root-toast";
+
+const SearchInput = ({ initialQuery, placeholder }) => {
   const pathname = usePathname();
   const [query, setQuery] = useState(initialQuery || "");
   return (
@@ -12,21 +13,25 @@ const SearchInput = ({ initialQuery }) => {
       <TextInput
         className="text-base mt-0.5 text-white font-pregular flex-1"
         value={query}
-        placeholder="Search a video topic"
+        placeholder={placeholder}
         placeholderTextColor="#CDCDE0"
         onChangeText={(e) => setQuery(e)}
       />
 
       <TouchableOpacity
         onPress={() => {
-          if (query === "") {
-            return Alert.alert(
-              "Missing query",
-              "Please input something to search results across database"
-            );
+          if (!pathname.startsWith("/bookmark")) {
+            if (query === "")
+              return Toast.show("Please enter a search query", {
+                duration: Toast.durations.LONG,
+                position: Toast.positions.BOTTOM,
+                shadow: true,
+                animation: true,
+                hideOnPress: true,
+              });
           }
-
           if (pathname.startsWith("/search")) router.setParams({ query });
+          if (pathname.startsWith("/bookmark")) router.setParams({ query });
           else router.push(`/search/${query}`);
         }}
       >
