@@ -52,11 +52,11 @@ const SignIn = () => {
           <Image
             source={images.logo}
             resizeMode="contain"
-            className="w-[115px] h-[35px]"
+            className="w-[110px] h-[75px]"
           />
 
-          <Text className="text-white text-2xl text-semibold mt-10 font-psemibold">
-            Log In to Aora
+          <Text className="text-white text-2xl text-semibold mt-5 font-psemibold">
+            Log In to Smart Sync
           </Text>
 
           <FormField
@@ -87,7 +87,7 @@ const SignIn = () => {
             </Text>
             <Link
               href="/sign-up"
-              className="text-secondary font-psemibold text-lg underline"
+              className="text-orange font-psemibold text-lg underline"
             >
               Sign Up
             </Link>
