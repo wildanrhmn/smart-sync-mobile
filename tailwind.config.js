@@ -5,11 +5,6 @@ module.exports = {
       colors: {
         primary: "#161622",
         secondary: {
-          DEFAULT: "#7045AF",
-          100: "#7345AF",
-          200: "#7C45AF",
-        },
-        orange: {
           DEFAULT: "#FF9C01",
           100: "#FF9001",
           200: "#FF8E01",
