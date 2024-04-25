@@ -60,6 +60,7 @@ const MyProfile = () => {
             title={item.title}
             thumbnail={item.thumbnail}
             video={item.video}
+            videoId={item.$id}
             creatorId={item.creator.$id}
             creator={item.creator.username}
             avatar={item.creator.avatar}
@@ -77,7 +78,7 @@ const MyProfile = () => {
               </TouchableOpacity>
             </View>
             <View className="flex flex-col justify-center items-center space-y-4">
-              <View className="rounded-sm border-2 border-secondary w-[56px] h-[56px]">
+              <View className="border-2 border-secondary w-[56px] h-[56px] rounded-lg p-0.5">
                 <Image
                   source={{ uri: user?.avatar }}
                   resizeMode="cover"

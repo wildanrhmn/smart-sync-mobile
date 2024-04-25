@@ -29,6 +29,7 @@ const Profile = () => {
             title={item.title}
             thumbnail={item.thumbnail}
             video={item.video}
+            videoId={item.$id}
             creatorId={item.creatorId}
             creator={item.creator.username}
             avatar={item.creator.avatar}

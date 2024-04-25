@@ -36,6 +36,7 @@ const Bookmark = () => {
             title={item.title}
             thumbnail={item.thumbnail}
             video={item.video}
+            videoId={item.$id}
             creatorId={item.creator.$id}
             creator={item.creator.username}
             avatar={item.creator.avatar}
@@ -58,6 +59,7 @@ const Bookmark = () => {
             showButton={false}
           />
         )}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       />
     </SafeAreaView>
   );

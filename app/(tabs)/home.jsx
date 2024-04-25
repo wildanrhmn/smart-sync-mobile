@@ -30,6 +30,7 @@ const Home = () => {
           <VideoCard
             title={item.title}
             thumbnail={item.thumbnail}
+            videoId={item.$id}
             video={item.video}
             creatorId={item.creator.$id}
             creator={item.creator.username}

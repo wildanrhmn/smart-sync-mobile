@@ -1,20 +1,66 @@
 import { useState } from "react";
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import { icons } from "../constants";
 import { ResizeMode, Video } from "expo-av";
 import { router } from "expo-router";
+import { useGlobalContext } from "../context/GlobalProvider";
+import { bookmarkVideo, unbookmarkVideo, getCurrentUser } from "../lib/appwrite";
 
 import OutsidePressHandler from "react-native-outside-press";
+import Toast from "react-native-root-toast";
 
-const VideoCard = ({ title, creatorId, creator, avatar, thumbnail, video }) => {
+const VideoCard = ({
+  title,
+  creatorId,
+  creator,
+  avatar,
+  thumbnail,
+  video,
+  videoId,
+}) => {
+  const { user, setUser } = useGlobalContext();
+
   const [play, setPlay] = useState(false);
   const [menuActive, setMenuActive] = useState(false);
- 
+
+  const onBookmarkVideo = async () => {
+    try {
+      await bookmarkVideo(videoId, user?.$id);
+
+      Toast.show("Successfully bookmarked video.", {
+        duration: Toast.durations.LONG,
+        position: Toast.positions.BOTTOM,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+      });
+
+      await getCurrentUser()
+      .then((result) => setUser(result));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const onUnbookmarkVideo = async () => {
+    try {
+      await unbookmarkVideo(videoId, user?.$id);
+
+      Toast.show("Successfully unbookmarked video.", {
+        duration: Toast.durations.LONG,
+        position: Toast.positions.BOTTOM,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+      });
+
+      await getCurrentUser()
+      .then((result) => setUser(result));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <View className="flex flex-col items-center px-4 mb-14">
       <View className="relative flex flex-row gap-3 items-start">
@@ -42,36 +88,54 @@ const VideoCard = ({ title, creatorId, creator, avatar, thumbnail, video }) => {
             </Text>
           </View>
         </View>
-        <TouchableOpacity
-          className="pt-2"
-          onPress={() => setMenuActive(true)}
-        >
+        <TouchableOpacity className="pt-2" onPress={() => setMenuActive(true)}>
           <Image source={icons.menu} className="w-6 h-6" resizeMode="contain" />
         </TouchableOpacity>
 
         {menuActive && (
-          <OutsidePressHandler onOutsidePress={() => setMenuActive(false)} className="absolute right-0 -bottom-20 z-50">
-            <View
-              className="bg-black-100 border-2 border-black-200 min-w-[150px] py-3 rounded-xl px-5 space-y-5"
-            >
-              <TouchableOpacity className="flex flex-row space-x-3 items-center">
-                <Image
-                  source={icons.bookmark}
-                  className="w-4 h-4"
-                  resizeMode="contain"
-                />
-                <Text className="text-sm text-gray-100 font-pmedium">Save</Text>
-              </TouchableOpacity>
-              <TouchableOpacity className="flex flex-row space-x-3 items-center">
-                <Image
-                  source={icons.bookmark}
-                  className="w-4 h-4"
-                  resizeMode="contain"
-                />
-                <Text className="text-sm text-gray-100 font-pmedium">
-                  Delete
-                </Text>
-              </TouchableOpacity>
+          <OutsidePressHandler
+            onOutsidePress={() => setMenuActive(false)}
+            className="min-w-[150px] min-h-[150px] absolute right-0 -bottom-36 z-50"
+          >
+            <View className="bg-black-100 border-2 border-black-200 py-3 rounded-xl px-5 space-y-5">
+              {user && (
+                <TouchableOpacity
+                  className="flex flex-row space-x-3 items-center"
+                  onPress={
+                    user.bookmarks.findIndex(
+                      (bookmark) => bookmark.$id === videoId
+                    ) !== -1
+                      ? onUnbookmarkVideo
+                      : onBookmarkVideo
+                  }
+                >
+                  <Image
+                    source={icons.bookmark}
+                    className="w-4 h-4"
+                    resizeMode="contain"
+                  />
+                  <Text className="text-sm text-gray-100 font-pmedium">
+                    {user.bookmarks.findIndex(
+                      (bookmark) => bookmark.$id === videoId
+                    ) !== -1
+                      ? "Unsave"
+                      : "Save"}
+                  </Text>
+                </TouchableOpacity>
+              )}
+
+              {user && user.$id === creatorId && (
+                <TouchableOpacity className="flex flex-row space-x-3 items-center">
+                  <Image
+                    source={icons.bookmark}
+                    className="w-4 h-4"
+                    resizeMode="contain"
+                  />
+                  <Text className="text-sm text-gray-100 font-pmedium">
+                    Delete
+                  </Text>
+                </TouchableOpacity>
+              )}
             </View>
           </OutsidePressHandler>
         )}
