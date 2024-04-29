@@ -5,6 +5,9 @@ import { images } from "../../constants";
 import { Link, router } from "expo-router";
 import { getCurrentUser, userLogin } from "../../lib/appwrite";
 import { useGlobalContext } from "../../context/GlobalProvider";
+import { useForm } from "react-hook-form";
+import { formLoginSchema } from "../../lib/schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
@@ -12,25 +15,23 @@ import Toast from "react-native-root-toast";
 
 const SignIn = () => {
   const { loading, setLoading, setUser, setIsLoggedIn } = useGlobalContext();
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
+
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    resolver: zodResolver(formLoginSchema),
   });
-
-  const submit = async () => {
-    if (!form.email || !form.password) {
-      Alert.alert("Error", "Please fill in all fields");
-    }
-
+  const submit = async (data) => {
     setLoading(true);
-
     try {
-      await userLogin(form.email, form.password);
+      await userLogin(data.email, data.password);
       const result = await getCurrentUser();
       setUser(result);
       setIsLoggedIn(true);
 
-      Toast.show('Successfully logged in.', {
+      Toast.show("Successfully logged in.", {
         duration: Toast.durations.LONG,
         position: Toast.positions.BOTTOM,
         shadow: true,
@@ -60,23 +61,23 @@ const SignIn = () => {
           </Text>
 
           <FormField
+            control={control}
+            name="email"
             title="Email"
-            value={form.email}
-            handleChangeText={(e) => setForm({ ...form, email: e })}
             otherStyles="mt-7"
             keyboardType="email-address"
           />
 
           <FormField
+            control={control}
+            name="password"
             title="Password"
-            value={form.password}
-            handleChangeText={(e) => setForm({ ...form, password: e })}
             otherStyles="mt-7"
           />
 
           <CustomButton
             title="Sign In"
-            onPress={submit}
+            onPress={handleSubmit(submit)}
             isLoading={loading}
             containerStyles="mt-7"
           />
