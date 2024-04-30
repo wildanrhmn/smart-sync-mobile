@@ -114,6 +114,12 @@ const TabsLayout = () => {
           }}
         />
         <Tabs.Screen
+          name="edit/[id]"
+          options={{
+            href: null,
+          }}
+        />
+        <Tabs.Screen
           name="search/[query]"
           options={{
             href: null,

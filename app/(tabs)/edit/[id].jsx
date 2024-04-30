@@ -1,27 +1,34 @@
+import { useEffect } from "react";
 import { View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createVideoSchema } from "../../lib/schema";
+import { createVideoSchema } from "../../../lib/schema";
 import { Video, ResizeMode } from "expo-av";
-import { icons } from "../../constants";
-import { useGlobalContext } from "../../context/GlobalProvider";
-import { submitVideo } from "../../lib/appwrite";
+import { icons } from "../../../constants";
+import { useGlobalContext } from "../../../context/GlobalProvider";
 import { router } from "expo-router";
+import { updateVideo } from "../../../lib/appwrite";
+import { useLocalSearchParams } from "expo-router";
+import { getPostById } from "../../../lib/appwrite";
 
-import FormField from "../../components/FormField";
+import useAppWrite from "../../../lib/useAppwrite";
+import FormField from "../../../components/FormField";
 import Toast from "react-native-root-toast";
-import CustomButton from "../../components/CustomButton";
+import CustomButton from "../../../components/CustomButton";
 import * as DocumentPicker from "expo-document-picker";
 
-const Create = () => {
+const Edit = () => {
+  const { id } = useLocalSearchParams();
+  const { data: post } = useAppWrite(() => getPostById(id));
+
   const { loading, setLoading, user } = useGlobalContext();
   const { control, handleSubmit, setValue, getValues, watch } = useForm({
-    defaultValues: {
-      title: "",
-      prompt: "",
-      video: null,
-      thumbnail: null,
+    values: {
+      title: post?.title,
+      prompt: post?.prompt,
+      video: post?.video,
+      thumbnail: post?.thumbnail,
     },
     resolver: zodResolver(createVideoSchema),
   });
@@ -52,8 +59,8 @@ const Create = () => {
     };
 
     try {
-      await submitVideo(payload).then(() => {
-        Toast.show("Successfully created video.", {
+      await updateVideo(id, payload).then(() => {
+        Toast.show("Successfully edited video.", {
           position: Toast.positions.BOTTOM,
           backgroundColor: "green",
           textColor: "white",
@@ -91,10 +98,11 @@ const Create = () => {
       });
     }
   };
+  
   return (
     <SafeAreaView className="bg-primary h-full">
       <ScrollView className="px-4 my-6">
-        <Text className="text-white text-2xl font-psemibold">Upload Video</Text>
+        <Text className="text-white text-2xl font-psemibold">Edit Video</Text>
 
         <FormField
           title="Video Title"
@@ -112,7 +120,11 @@ const Create = () => {
           <TouchableOpacity onPress={() => openPicker("video")}>
             {watchVideoExist ? (
               <Video
-                source={{ uri: getValues("video").uri }}
+                source={{
+                  uri: getValues("video").uri
+                    ? getValues("video").uri
+                    : getValues("video"),
+                }}
                 className="w-full h-64 rounded-2xl"
                 useNativeControls
                 resizeMode={ResizeMode.CONTAIN}
@@ -168,7 +180,7 @@ const Create = () => {
 
         <CustomButton
           isLoading={loading}
-          title="Create"
+          title="Edit"
           onPress={handleSubmit(submit)}
           containerStyles="my-7"
         />
@@ -177,4 +189,4 @@ const Create = () => {
   );
 };
 
-export default Create;
+export default Edit;

@@ -12,6 +12,7 @@ import eyeHide from "../assets/icons/eye-hide.png";
 import eye from "../assets/icons/eye.png";
 import play from "../assets/icons/play.png";
 import deleteIcon from "../assets/icons/delete.png";
+import editIcon from "../assets/icons/edit.png";
 
 
 export default {
@@ -29,4 +30,5 @@ export default {
   eyeHide,
   eye,
   deleteIcon,
+  editIcon,
 };

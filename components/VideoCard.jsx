@@ -97,7 +97,19 @@ const VideoCard = ({
             onOutsidePress={() => setMenuActive(false)}
             className="min-w-[150px] min-h-[150px] absolute right-0 -bottom-36 z-50"
           >
-            <View className="bg-black-100 border-2 border-black-200 py-3 rounded-xl px-5 space-y-5">
+            <View className="bg-black-100 border-2 border-black-200 py-3 rounded-xl px-5 space-y-2">
+            {user && user.$id === creatorId && (           
+                  <TouchableOpacity className="flex flex-row space-x-3 items-center" onPress={() => router.push(`/edit/${videoId}`)}>
+                    <Image
+                      source={icons.editIcon}
+                      className="w-4 h-4"
+                      resizeMode="contain"
+                    />
+                    <Text className="text-sm text-gray-100 font-pmedium">
+                      Edit
+                    </Text>
+                  </TouchableOpacity>
+              )}
               {user && (
                 <TouchableOpacity
                   className="flex flex-row space-x-3 items-center"
@@ -124,17 +136,17 @@ const VideoCard = ({
                 </TouchableOpacity>
               )}
 
-              {user && user.$id === creatorId && (
-                <TouchableOpacity className="flex flex-row space-x-3 items-center">
-                  <Image
-                    source={icons.bookmark}
-                    className="w-4 h-4"
-                    resizeMode="contain"
-                  />
-                  <Text className="text-sm text-gray-100 font-pmedium">
-                    Delete
-                  </Text>
-                </TouchableOpacity>
+              {user && user.$id === creatorId && (           
+                  <TouchableOpacity className="flex flex-row space-x-3 items-center">
+                    <Image
+                      source={icons.deleteIcon}
+                      className="w-4 h-4"
+                      resizeMode="contain"
+                    />
+                    <Text className="text-sm text-gray-100 font-pmedium">
+                      Delete
+                    </Text>
+                  </TouchableOpacity>
               )}
             </View>
           </OutsidePressHandler>
